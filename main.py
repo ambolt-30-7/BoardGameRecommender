@@ -1,6 +1,4 @@
 import sqlite3
-from typing import List
-import nltk
 
 from bertopic import BERTopic
 

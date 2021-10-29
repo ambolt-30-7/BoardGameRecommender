@@ -33,9 +33,9 @@ MANIFEST
 *.manifest
 *.spec
 
-models/
+models/*
 .idea/
-data/
+data/*
 
 # Installer logs
 pip-log.txt
