@@ -1,4 +1,5 @@
 import sqlite3
+from typing import List
 
 from bertopic import BERTopic
 
@@ -10,10 +11,23 @@ def get_data(path: str, query: str):
     return full_data
 
 
-if __name__ == '__main__':
-    descriptions = [x[3] for x in get_data("data/database.sqlite", "SELECT * FROM boardgames")][:1000]
-
+def train_model(data: List[str], name: str) -> List[int]:
+    """
+    Trains a model and saves it as name in the folder models
+    :param name: the wanted name for the model
+    :param data: list of strings
+    :return: the topics
+    """
     topic_model = BERTopic()
-    topics, probs = topic_model.fit_transform(descriptions)
-    topic_model.save("models/My_model")
-    topic_model.visualize_barchart()
+    topics, probs = topic_model.fit_transform(data)
+    topic_model.save("models/" + name)
+    return topics
+
+
+def load_model(name: str) -> BERTopic:
+    return BERTopic.load('models/' + name)
+
+
+if __name__ == '__main__':
+    descriptions = [x[3] for x in get_data("data/database.sqlite", "SELECT * FROM boardgames")]
+    train_model(descriptions, 'full_model')
