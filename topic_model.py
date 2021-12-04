@@ -6,9 +6,16 @@ from bertopic import BERTopic
 
 def get_data(path: str, query: str):
     connection = sqlite3.connect(path)
+    # connection.row_factory = sqlite3.Row
     cursor = connection.cursor().execute(query)
     full_data = cursor.fetchall()
     return full_data
+
+
+def query_data(path: str, query):
+    connection = sqlite3.connect(path)
+    result_set = connection.execute(query)
+    return result_set.fetchall()
 
 
 def train_model(data: List[str], name: str) -> List[int]:

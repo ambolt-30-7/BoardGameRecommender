@@ -1,21 +1,36 @@
 from typing import List
-import umap
+
 from topic_model import load_model, get_data
+
+
+def process_query(query: str):
+    # Lowercase query
+    query.lower()
+
+    # Parse input
+    split_input: List[str] = query.split(' ')
+
+    return split_input
+
 
 if __name__ == '__main__':
     # Data
     data = get_data("data/database.sqlite", "SELECT * FROM boardgames")
 
     # Model
-    model = load_model('1k_model')
+    model = load_model('full_model')
 
     # Input
-    x = "Catan"
-
-    # Parse input
-    split_input: List[str] = x.split(' ')
+    x = "Deck-Building"
 
     # Get topics from input
-    predictions = model.transform(split_input)
+    predictions = model.transform(process_query(x))
 
-    print(predictions)
+    # Predicted topic
+    topic = int(predictions[0][0])
+
+    # Representative descriptions from topic
+    representative_descriptions = model.get_representative_docs(topic)
+
+    for description in representative_descriptions:
+        print(description)
