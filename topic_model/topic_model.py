@@ -1,15 +1,29 @@
 import sqlite3
+from sqlite3 import Connection
 from typing import List
 
+import pandas
+import pandasql as ps
 from bertopic import BERTopic
 
 
-def get_data(path: str, query: str):
-    connection = sqlite3.connect(path)
-    # connection.row_factory = sqlite3.Row
+def get_db_connection(path: str) -> Connection:
+    return sqlite3.connect(path)
+
+
+def get_full_data_and_column_names(path: str, query: str):
+    connection = get_db_connection(path)
     cursor = connection.cursor().execute(query)
+    column_names = list(map(lambda x: x[0], cursor.description))
     full_data = cursor.fetchall()
-    return full_data
+    return column_names, full_data
+
+
+def get_data(path: str) -> pandas.DataFrame:
+    conn = sqlite3.connect(path)
+    df = pandas.read_sql_query("SELECT * FROM BoardGames", conn)
+    conn.close()
+    return df
 
 
 def query_data(path: str, query):
@@ -36,5 +50,7 @@ def load_model(name: str) -> BERTopic:
 
 
 if __name__ == '__main__':
-    descriptions = [x[3] for x in get_data("data/database.sqlite", "SELECT * FROM boardgames")]
+    # columns, board_games = get_full_data_and_column_names("data/database.sqlite", "SELECT * FROM boardgames")
+    # descriptions = [x[3] for x in board_games]
+    connection = get_db_connection("data/database.sqlite")
     train_model(descriptions, 'full_model')

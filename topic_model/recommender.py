@@ -1,6 +1,6 @@
 from typing import List
 
-from topic_model import load_model, get_data
+from topic_model import load_model, get_db_connection
 
 
 def process_query(query: str):
@@ -15,7 +15,7 @@ def process_query(query: str):
 
 if __name__ == '__main__':
     # Data
-    data = get_data("data/database.sqlite", "SELECT * FROM boardgames")
+    data = get_db_connection("data/database.sqlite", "SELECT * FROM boardgames")
 
     # Model
     model = load_model('full_model')
