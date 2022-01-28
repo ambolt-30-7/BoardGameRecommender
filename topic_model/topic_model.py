@@ -3,7 +3,6 @@ from sqlite3 import Connection
 from typing import List
 
 import pandas
-import pandasql as ps
 from bertopic import BERTopic
 
 
@@ -50,7 +49,6 @@ def load_model(name: str) -> BERTopic:
 
 
 if __name__ == '__main__':
-    # columns, board_games = get_full_data_and_column_names("data/database.sqlite", "SELECT * FROM boardgames")
-    # descriptions = [x[3] for x in board_games]
-    connection = get_db_connection("data/database.sqlite")
-    train_model(descriptions, 'full_model')
+    columns, board_games = get_full_data_and_column_names("data/database.sqlite", "SELECT * FROM boardgames")
+    descriptions = [x[3] for x in board_games]
+    train_model(descriptions, 'full_model_v2')
