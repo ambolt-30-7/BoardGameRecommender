@@ -35,7 +35,6 @@ MANIFEST
 
 topic_model/models/*
 .idea/
-topic_model/data/*
 
 # Installer logs
 pip-log.txt
