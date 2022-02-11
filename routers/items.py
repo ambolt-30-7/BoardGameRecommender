@@ -59,12 +59,17 @@ async def get_board_game_recommendation(query: str):
     # Predicted topic
     topics = predictions[0]
 
+    # Representative document for each topic
+    representative_docs = model.get_representative_docs()
+
     # Representative descriptions from topic
-    if topics == -1:
-        representative_descriptions = model.get_representative_docs()
-    representative_descriptions = model.get_representative_docs(topics)
+    representative_descriptions = None
+    if -1 not in topics:
+        representative_descriptions = [representative_docs.get(x) for x in topics]
 
     # Combine all representative descriptions
-    descriptions = list(itertools.chain.from_iterable(list(representative_descriptions.values())))
-
-    return [get_board_game_name_by_desc(x) for x in descriptions]
+    if representative_descriptions is not None:
+        descriptions = list(itertools.chain.from_iterable(representative_descriptions))
+        return [get_board_game_name_by_desc(x) for x in descriptions]
+    else:
+        return []
